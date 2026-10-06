@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>RetailOS — Overview</title><link rel="stylesheet" href="css/app.css">
+</head>
+<body data-page="overview">
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="index.html"><span class="brand-mark">R</span><span>Retail<span>OS</span></span></a>
+      <p class="workspace-label">WORKSPACE</p>
+      <nav class="nav-links">
+        <a class="active" href="index.html"><span>◈</span> Overview</a>
+        <a href="analytics.html"><span>↗</span> Analytics</a>
+        <a href="predictor.html"><span>⌁</span> Sales predictor</a>
+        <a href="recommendations.html"><span>✦</span> Recommendations</a>
+      </nav>
+      <div class="sidebar-foot"><span class="live-dot"></span> Hybrid AI mode<br><small>ML + optional GenAI</small></div>
+    </aside>
+    <main class="main-content">
+      <header class="topbar"><div><p class="page-kicker">Retail intelligence</p><h1>Good morning, Prash</h1></div><div id="dataPill" class="data-pill">Loading your data…</div></header>
+      <section class="hero-card"><div><p class="page-kicker">Decision dashboard</p><h2>Turn daily transactions into clear next steps.</h2><p>Explore revenue, find growth opportunities, and make simple, defensible decisions from the YBI retail dataset.</p><a class="primary-button" href="analytics.html">Explore analytics <span>→</span></a></div><div class="hero-stat"><span>This dataset has</span><strong id="heroTransactions">—</strong><small>transactions ready to explore</small></div></section>
+      <section class="metric-grid"><article class="metric-card"><span>Filtered revenue</span><strong id="totalRevenue">—</strong><small id="revenueNote">All available data</small></article><article class="metric-card"><span>Orders</span><strong id="orderCount">—</strong><small>Transactions selected</small></article><article class="metric-card"><span>Average order</span><strong id="averageOrder">—</strong><small>Revenue per transaction</small></article><article class="metric-card accent"><span>Top category</span><strong id="topCategory">—</strong><small id="topCategoryNote">Highest revenue share</small></article></section>
+      <section class="content-grid two-one"><article class="surface"><div class="surface-head"><div><p class="section-label">Performance</p><h2>Monthly revenue</h2></div><select id="overviewCategory" class="select-compact"><option value="All">All categories</option></select></div><div class="chart-wrap"><canvas id="overviewTrend"></canvas></div></article><article class="surface spotlight"><p class="section-label">Focus today</p><h2 id="focusTitle">Finding the strongest opportunity…</h2><p id="focusText">We are reading your retail data.</p><a href="recommendations.html">Open action plan →</a></article></section>
+      <section class="surface table-surface"><div class="surface-head"><div><p class="section-label">Product performance</p><h2>Top products</h2></div><a href="analytics.html">View full analytics →</a></div><div class="table-wrap"><table><thead><tr><th>Product</th><th>Category</th><th class="text-right">Revenue</th><th class="text-right">Units</th></tr></thead><tbody id="topProducts"></tbody></table></div></section>
+    </main>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script><script type="module" src="js/overview.js"></script>
+</body>
+</html>

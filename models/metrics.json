@@ -1,0 +1,19 @@
+{
+  "model": "RandomForestRegressor",
+  "target": "Total_Sales",
+  "samples": 1000,
+  "test_samples": 200,
+  "mae": 56.35,
+  "rmse": 92.28,
+  "r2": 0.9985,
+  "features": [
+    "Quantity",
+    "Price",
+    "Category",
+    "Product_Name",
+    "Month",
+    "DayOfWeek",
+    "DayOfMonth"
+  ],
+  "note": "The YBI dataset defines Total_Sales as Quantity \u00d7 Price, so this model demonstrates an end-to-end ML pipeline rather than independent demand forecasting."
+}

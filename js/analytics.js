@@ -1,0 +1,18 @@
+import { filterRetailData, groupBySum, monthTotals, money, summarize } from "./data.js";
+import { bootPage, state } from "./shared.js";
+
+let categoryChart; let trendChart;
+const dateText = (date) => `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+
+function update(data) {
+  state.visibleData = data; const info = summarize(data);
+  document.querySelector("#totalRevenue").textContent = money(info.revenue); document.querySelector("#orderCount").textContent = info.orders.toLocaleString("en-IN"); document.querySelector("#averageOrder").textContent = money(info.average); document.querySelector("#topCategory").textContent = info.topCategory; document.querySelector("#recordsNote").textContent = `${info.orders.toLocaleString("en-IN")} records shown`;
+  const categories = info.categories; const months = monthTotals(data); categoryChart?.destroy(); trendChart?.destroy();
+  categoryChart = new Chart(document.querySelector("#categoryChart"), { type: "doughnut", data: { labels: categories.map((item) => item.label), datasets: [{ data: categories.map((item) => item.revenue), backgroundColor: ["#4269e8", "#31b5cb", "#8b70d9", "#f0a553", "#3aad75"], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, cutout: "68%", plugins: { legend: { position: "bottom", labels: { usePointStyle: true, boxWidth: 8, padding: 15 } }, tooltip: { callbacks: { label: (item) => `${item.label}: ${money(item.raw)}` } } } } });
+  trendChart = new Chart(document.querySelector("#trendChart"), { type: "bar", data: { labels: months.map((item) => item.label), datasets: [{ data: months.map((item) => item.revenue), backgroundColor: "#31b5cb", borderRadius: 5, maxBarThickness: 30 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: (item) => money(item.raw) } } }, scales: { y: { grid: { color: "#edf0f5" }, ticks: { callback: (value) => `₹${value}` } }, x: { grid: { display: false } } } } });
+  const products = groupBySum(data, "productName").slice(0, 8); const max = products[0]?.revenue || 1; const list = document.querySelector("#productList"); list.innerHTML = "";
+  products.forEach((item, index) => { const category = data.find((row) => row.productName === item.label).category; list.insertAdjacentHTML("beforeend", `<div class="product-row"><div><b>${String(index + 1).padStart(2, "0")} · ${item.label}</b><span>${category}</span></div><div class="progress-track"><i style="width:${(item.revenue / max) * 100}%"></i></div><span class="text-right">${item.units} units</span><b class="text-right">${money(item.revenue)}</b></div>`); });
+}
+
+bootPage((data) => { const dates = data.map((item) => item.date).sort((a, b) => a - b); const start = document.querySelector("#startDate"); const end = document.querySelector("#endDate"); const category = document.querySelector("#categoryFilter"); start.value = dateText(dates[0]); end.value = dateText(dates.at(-1)); [...new Set(data.map((item) => item.category))].sort().forEach((item) => category.add(new Option(item, item)));
+  const apply = () => update(filterRetailData(data, { start: start.value ? new Date(`${start.value}T00:00:00`) : null, end: end.value ? new Date(`${end.value}T23:59:59`) : null, category: category.value })); [start, end, category].forEach((input) => input.addEventListener("change", apply)); document.querySelector("#resetFilters").addEventListener("click", () => { start.value = dateText(dates[0]); end.value = dateText(dates.at(-1)); category.value = "All"; apply(); }); apply(); });
